@@ -1,28 +1,32 @@
-JAL ra, SETUP
+.data 
+msg: .string "ETIEETTIETI eti"
 
+.text
+# prepare memory address
+LA t0, msg          # Load Address
 # set characters to compare
 ADDI a1, x0, 0x45  # E
 ADDI a2, x0, 0x54  # T
 ADDI a3, x0, 0x49  # I
 
 Start:
-LB x1, 0(sp)
-ADDI sp, sp, 4
+LB x1, 0(t0)
+ADDI t0, t0, 1
 BEQ x1, x0, END
 BEQ x1, a1, E
 JAL x0, Start
 
 E:
-LB x1, 0(sp)
-ADDI sp, sp, 4
+LB x1, 0(t0)
+ADDI t0, t0, 1
 BEQ x1, x0, END
 BEQ x1, a2, ET
 BEQ x1, a1, E
 JAL x0, Start
 
 ET:
-LB x1, 0(sp)
-ADDI sp, sp, 4
+LB x1, 0(t0)
+ADDI t0, t0, 1
 BEQ x1, x0, END
 BEQ x1, a3, ETI
 BEQ x1, a1, E
@@ -30,56 +34,11 @@ JAL x0, Start
 
 ETI:
 ADDI x10, x10, 1  # increment Counter
-LB x1, 0(sp)
-ADDI sp, sp, 4
+LB x1, 0(t0)
+ADDI t0, t0, 1
 BEQ x1, x0, END
 BEQ x1, a1, E
 JAL x0, Start
-
-
-
-
-
-SETUP:
-# load data into memory in reverse order
-ADDI sp, sp, -4
-ADDI a0, x0, 0x45  # E
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x49  # I
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x54  # T
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x45  # E
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x54  # T
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x45  # E
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x49  # I
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x54  # T
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x45  # E
-SB a0, 0(sp)
-
-ADDI a0, x0, 0
-JALR x0, ra, 0
 
 
 

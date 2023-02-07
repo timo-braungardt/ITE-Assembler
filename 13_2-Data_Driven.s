@@ -1,5 +1,9 @@
-JAL ra, SETUP
+.data 
+msg: .string "ETIEETTIETI eti ETI"
 
+.text
+# prepare memory address
+LA t0, msg          # Load Address
 # set characters to compare
 ADDI a1, x0, 0x45   # E
 ADDI a2, x0, 0x54   # T
@@ -14,8 +18,8 @@ ADDI a5, x0, 0      # Set start state
 
 Start:
 # load data
-LB x1, 0(sp)
-ADDI sp, sp, 4
+LB x1, 0(t0)
+ADDI t0, t0, 1
 BEQ x1, x0, END     # if 0 then terminate
 
 # check state
@@ -29,7 +33,6 @@ JAL x0, _Start
 
 # case 3
 ETI:
-ADDI x10, x10, 1
 BEQ x1, a1, ETI_E   # if E Jump
 ADDI a5, x0, 0      # goto state start
 JAL x0, Start
@@ -48,6 +51,7 @@ ET_E:
 ADDI a5, x0, 1      # goto state E
 JAL x0, Start
 ET_I:
+ADDI x10, x10, 1        # add 1 to counter - otherwise bug if no char is following ETI
 ADDI a5, x0, 3      # goto state ETI
 JAL x0, Start
 
@@ -72,50 +76,6 @@ JAL x0, Start
 _Start_E:
 ADDI a5, x0, 1      # goto state E
 JAL x0, Start
-
-
-
-
-SETUP:
-# load data into memory in reverse order
-ADDI sp, sp, -4
-ADDI a0, x0, 0x45  # E
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x49  # I
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x54  # T
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x45  # E
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x54  # T
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x49  # I
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x54  # T
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x45  # E
-SB a0, 0(sp)
-
-ADDI sp, sp, -4
-ADDI a0, x0, 0x45  # E
-SB a0, 0(sp)
-
-ADDI a0, x0, 0
-JALR x0, ra, 0
 
 
 

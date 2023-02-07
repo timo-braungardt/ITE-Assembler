@@ -10,36 +10,12 @@ JAL x0, END
 
 
 
+
 # recursive function
 Calc:
-ADDI sp, sp, -12      # sichern der Register
-SW ra, 0(sp)
-SW a1, 4(sp)
-SW a2, 8(sp)
 
-Logic:
-ADDI a1, a0, 0      # save own i
-ADDI a2, x0, 1      # (const for base case check)
-BEQ a0, a2, BaseCase        # is a0 == 1?
-# if not - recursive call with i-1
-ADDI a0, a0, -1
-JAL ra, Calc        # call function
-
-# return of the recursion - add own value to returned var of a0 
-ADD a0, a0, a1
-JAL x0, Cleanup
-
-BaseCase:
-ADDI a0, x0, 1      # return auf 1 setzen (unnötig) 
-
-Cleanup:
-LW ra, 0(sp)
-LW a1, 4(sp)
-LW a2, 8(sp)
-ADDI sp, sp, 12      # wiederherstellen der Register
 # return to caller
 JALR x0, ra, 0
-
 
 
 
